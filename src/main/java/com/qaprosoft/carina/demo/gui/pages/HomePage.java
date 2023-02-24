@@ -18,6 +18,7 @@ package com.qaprosoft.carina.demo.gui.pages;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.qaprosoft.carina.demo.gui.components.FooterMenu;
+import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.WeValuePrivacyAd;
 import com.zebrunner.carina.utils.Configuration;
 import com.zebrunner.carina.utils.R;
@@ -36,6 +37,9 @@ public class HomePage extends AbstractPage {
     @FindBy(id = "footmenu")
     private FooterMenu footerMenu;
 
+    @FindBy(id = "header")
+    private HeaderMenu headerMenu;
+
     @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
     private List<ExtendedWebElement> brandLinks;
 
@@ -53,6 +57,10 @@ public class HomePage extends AbstractPage {
 
     public FooterMenu getFooterMenu() {
         return footerMenu;
+    }
+
+    public HeaderMenu getHeaderMenu() {
+        return headerMenu;
     }
 
     public BrandModelsPage selectBrand(String brand) {
@@ -74,5 +82,11 @@ public class HomePage extends AbstractPage {
 
     public ExtendedWebElement getPhoneFinderButton() {
         return phoneFinderButton;
+    }
+
+    public void ScrollDownToFooterMenu(){
+        LOGGER.info("scroll down to the footer menu");
+
+        footerMenu.getReviewsLink().scrollTo();
     }
 }
