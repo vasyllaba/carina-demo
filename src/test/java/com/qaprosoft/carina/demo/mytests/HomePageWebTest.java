@@ -6,14 +6,13 @@ import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.LogInModal;
 import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
 import com.qaprosoft.carina.demo.gui.pages.*;
-import com.zebrunner.agent.core.annotation.TestLabel;
+import com.qaprosoft.carina.demo.utils.StringGenerator;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.core.registrar.tag.Priority;
 import com.zebrunner.carina.core.registrar.tag.TestPriority;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Set;
 
 
 public class HomePageWebTest implements IAbstractTest {
@@ -118,8 +117,8 @@ public class HomePageWebTest implements IAbstractTest {
         Assert.assertTrue(sp.isCreateAccountElementsPresent(), "Some element in create account menu do not present");
 
         //fill in all info to create new account
-        sp.fillInNewUserInfo("vasylLabaTesterUser",
-                "vasylLabaTesterUser@gmail.com",
+        sp.fillInNewUserInfo(StringGenerator.generateLogin(),
+                StringGenerator.generateEmail(),
                 "12345678AAa",
                 true,
                 true);
@@ -141,10 +140,19 @@ public class HomePageWebTest implements IAbstractTest {
 
         //click on the button “Log in”
         LogInModal lm = homePage.getHeaderMenu().clickLogInButton();
-        pause(2);
-        Assert.assertTrue(lm.isUIObjectPresent(),
-                "Log In modal object is not visible");
 
+        //Check all elements on the LogIn Modal - if elements present
+        Assert.assertTrue(lm.isVisible(), "Log In modal object is not visible");
+
+        //fill in login and password
+        lm.fillInEmailInput("vasylLabaTesterUser@gmail.com");
+        lm.fillInPasswordInput("12345678AAa");
+
+        //click button Log in
+        LogInPage logInPage = lm.clickLogInButton();
+
+        //check if was opened next page
+        Assert.assertTrue(logInPage.isPresent(), "LogInPage object is not present");
     }
 
 }
