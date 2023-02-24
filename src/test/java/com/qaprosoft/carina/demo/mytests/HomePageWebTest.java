@@ -16,16 +16,16 @@ import org.testng.annotations.Test;
 
 
 public class HomePageWebTest implements IAbstractTest {
-    private final String NEWS_PAGE_URL = "https://www.gsmarena.com/news.php3";
-    private final String REVIEWS_PAGE_URL = "https://www.gsmarena.com/reviews.php3";
-    private final String VIDEOS_PAGE_URL = "https://www.gsmarena.com/videos.php3";
-    private final String FEATURED_PAGE_URL = "https://www.gsmarena.com/news.php3?sTag=Featured";
-    private final String PHONE_FINDER_PAGE_URL = "https://www.gsmarena.com/search.php3?";
-    private final String DEALS_PAGE_URL = "https://www.gsmarena.com/deals.php3";
-    private final String MERCH_PAGE_URL = "https://merch.gsmarena.com/";
-    private final String COVERAGE_PAGE_URL = "https://www.gsmarena.com/network-bands.php3";
-    private final String CONTACT_PAGE_URL = "https://www.gsmarena.com/contact.php3";
-    private final String SIGN_UP_PAGE_URL = "https://www.gsmarena.com/register.php3";
+    private static final String NEWS_PAGE_URL = "https://www.gsmarena.com/news.php3";
+    private static final String REVIEWS_PAGE_URL = "https://www.gsmarena.com/reviews.php3";
+    private static final String VIDEOS_PAGE_URL = "https://www.gsmarena.com/videos.php3";
+    private static final String FEATURED_PAGE_URL = "https://www.gsmarena.com/news.php3?sTag=Featured";
+    private static final String PHONE_FINDER_PAGE_URL = "https://www.gsmarena.com/search.php3?";
+    private static final String DEALS_PAGE_URL = "https://www.gsmarena.com/deals.php3";
+    private static final String MERCH_PAGE_URL = "https://merch.gsmarena.com/";
+    private static final String COVERAGE_PAGE_URL = "https://www.gsmarena.com/network-bands.php3";
+    private static final String CONTACT_PAGE_URL = "https://www.gsmarena.com/contact.php3";
+    private static final String SIGN_UP_PAGE_URL = "https://www.gsmarena.com/register.php3";
 
     @Test()
     @MethodOwner(owner = "Vasyl Laba")
