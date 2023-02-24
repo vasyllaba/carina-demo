@@ -15,6 +15,8 @@
  */
 package com.qaprosoft.carina.demo.gui.components;
 
+import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
+import com.qaprosoft.carina.demo.gui.pages.NetworkCoverage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -25,15 +27,33 @@ import com.qaprosoft.carina.demo.gui.pages.CompareModelsPage;
 import com.qaprosoft.carina.demo.gui.pages.HomePage;
 import com.qaprosoft.carina.demo.gui.pages.NewsPage;
 
+import java.util.List;
+
 public class FooterMenu extends AbstractUIObject {
+
+    @FindBy(xpath = "//div[@id='footmenu']//a[@href]")
+    private List<ExtendedWebElement> footerMenuButtons;
+
+    @FindBy(xpath = "//div[@id='footer-inner']//div[@class='footer-logo']")
+    private ExtendedWebElement footerLogo;
+
     @FindBy(linkText = "Home")
     private ExtendedWebElement homeLink;
 
     @FindBy(xpath = "//div[@class='footer-inner']//a[contains(text(),'Compare')]")
     private ExtendedWebElement compareLink;
-    
+
     @FindBy(linkText = "News")
     private ExtendedWebElement newsLink;
+
+    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(@href,'reviews.php3')]")
+    private ExtendedWebElement reviewsLink;
+
+    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(@href,'blog.php3')]")
+    private ExtendedWebElement blogLink;
+
+    @FindBy(xpath = "(//a[text()='Coverage'])[2]")
+    private ExtendedWebElement coverageLink;
 
     public FooterMenu(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
@@ -48,9 +68,34 @@ public class FooterMenu extends AbstractUIObject {
         compareLink.click();
         return new CompareModelsPage(driver);
     }
-    
+
     public NewsPage openNewsPage() {
         newsLink.click();
         return new NewsPage(driver);
+    }
+
+    public boolean isElementPresent() {
+        return compareLink.isElementPresent();
+    }
+
+    public ExtendedWebElement getFooterLogo() {
+        return footerLogo;
+    }
+
+    public ExtendedWebElement getHomeLink() {
+        return homeLink;
+    }
+
+    public ExtendedWebElement getReviewsLink() {
+        return reviewsLink;
+    }
+
+    public NetworkCoverage clickCoverageButton() {
+        coverageLink.click();
+        return new NetworkCoverage(driver);
+    }
+
+    public void clickFooterButton(FooterMenuButtons button) {
+        footerMenuButtons.get(button.getButton()).click();
     }
 }
