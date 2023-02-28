@@ -4,8 +4,9 @@ import com.qaprosoft.carina.core.foundation.IAbstractTest;
 import com.qaprosoft.carina.demo.gui.components.FooterMenu;
 import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.LogInModal;
-import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
 import com.qaprosoft.carina.demo.gui.pages.*;
+import com.qaprosoft.carina.demo.projectConstants.ProjectConstants;
+import com.qaprosoft.carina.demo.utils.PageHandler;
 import com.qaprosoft.carina.demo.utils.StringGenerator;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.core.registrar.tag.Priority;
@@ -16,16 +17,6 @@ import org.testng.annotations.Test;
 
 
 public class HomePageWebTest implements IAbstractTest {
-    private static final String NEWS_PAGE_URL = "https://www.gsmarena.com/news.php3";
-    private static final String REVIEWS_PAGE_URL = "https://www.gsmarena.com/reviews.php3";
-    private static final String VIDEOS_PAGE_URL = "https://www.gsmarena.com/videos.php3";
-    private static final String FEATURED_PAGE_URL = "https://www.gsmarena.com/news.php3?sTag=Featured";
-    private static final String PHONE_FINDER_PAGE_URL = "https://www.gsmarena.com/search.php3?";
-    private static final String DEALS_PAGE_URL = "https://www.gsmarena.com/deals.php3";
-    private static final String MERCH_PAGE_URL = "https://merch.gsmarena.com/";
-    private static final String COVERAGE_PAGE_URL = "https://www.gsmarena.com/network-bands.php3";
-    private static final String CONTACT_PAGE_URL = "https://www.gsmarena.com/contact.php3";
-    private static final String SIGN_UP_PAGE_URL = "https://www.gsmarena.com/register.php3";
 
     @Test()
     @MethodOwner(owner = "Vasyl Laba")
@@ -36,16 +27,14 @@ public class HomePageWebTest implements IAbstractTest {
         homePage.open();
         Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
 
-        //Scroll down to the footer menu
+        //Scroll down to the footer menu and check if footer is on screen
         homePage.ScrollDownToFooterMenu();
-        //check if footer is on screen
         Assert.assertTrue(homePage.getFooterMenu().isElementPresent(), "News page is not opened!");
 
-        //check if all buttons on the menu present
+        //check if buttons on the menu present
         FooterMenu footerMenu = homePage.getFooterMenu();
-        footerMenu.clickFooterButton(FooterMenuButtons.COVERAGE);
-        NetworkCoverage networkCoverage = new NetworkCoverage(getDriver());
-        Assert.assertTrue(networkCoverage.isNetworkCoverageTitlePresent(), "Title is not present!");
+        NewsPage newsPage = footerMenu.openNewsPage();
+        Assert.assertTrue(newsPage.isPageOpened(), "Page is not opened!");
     }
 
     @Test()
@@ -65,38 +54,34 @@ public class HomePageWebTest implements IAbstractTest {
 
         //click on each button and check if we go to the next Page
         headerMenu.clickNewsButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), NEWS_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.NEWS_PAGE_URL, "Page url does not match");
 
         headerMenu.clickReviewsButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), REVIEWS_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.REVIEWS_PAGE_URL, "Page url does not match");
 
         headerMenu.clickVideosPageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), VIDEOS_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.VIDEOS_PAGE_URL, "Page url does not match");
 
         headerMenu.clickFeaturedPageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), FEATURED_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.FEATURED_PAGE_URL, "Page url does not match");
 
         headerMenu.clickPhoneFinderPageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), PHONE_FINDER_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.PHONE_FINDER_PAGE_URL, "Page url does not match");
 
         headerMenu.clickDealsPageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), DEALS_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.DEALS_PAGE_URL, "Page url does not match");
+
+        headerMenu.clickMerchPageButton();
+        PageHandler.switchBetweenPages(getDriver());
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.MERCH_PAGE_URL, "Page url does not match");
+        PageHandler.closeCurrentPage(getDriver());
+        PageHandler.switchBetweenPages(getDriver());
 
         headerMenu.clickCoveragePageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), COVERAGE_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.COVERAGE_PAGE_URL, "Page url does not match");
 
         headerMenu.clickContactPageButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), CONTACT_PAGE_URL, "Page url does not match");
-
-        String originalWindow = getDriver().getWindowHandle();
-        MerchPage mp = headerMenu.clickMerchPageButton();
-        for (String windowHandle : getDriver().getWindowHandles()) {
-            if (!originalWindow.contentEquals(windowHandle)) {
-                getDriver().switchTo().window(windowHandle);
-                break;
-            }
-        }
-        Assert.assertEquals(getDriver().getCurrentUrl(), MERCH_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.CONTACT_PAGE_URL, "Page url does not match");
 
     }
 
@@ -111,7 +96,7 @@ public class HomePageWebTest implements IAbstractTest {
 
         //click on the button “Sing up”
         SignUpPage sp = homePage.getHeaderMenu().clickSignUpButton();
-        Assert.assertEquals(getDriver().getCurrentUrl(), SIGN_UP_PAGE_URL, "Page url does not match");
+        Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.SIGN_UP_PAGE_URL, "Page url does not match");
 
         //check if all elements on the SingUp Page present
         Assert.assertTrue(sp.isCreateAccountElementsPresent(), "Some element in create account menu do not present");
@@ -139,17 +124,12 @@ public class HomePageWebTest implements IAbstractTest {
         Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
 
         //click on the button “Log in”
-        LogInModal lm = homePage.getHeaderMenu().clickLogInButton();
+        LogInModal loginModal = homePage.getHeaderMenu().clickLogInButton();
 
         //Check all elements on the LogIn Modal - if elements present
-        Assert.assertTrue(lm.isVisible(), "Log In modal object is not visible");
+        Assert.assertTrue(loginModal.isVisible(), "Log In modal object is not visible");
 
-        //fill in login and password
-        lm.fillInEmailInput("vasylLabaTesterUser@gmail.com");
-        lm.fillInPasswordInput("12345678AAa");
-
-        //click button Log in
-        LogInPage logInPage = lm.clickLogInButton();
+        LogInPage logInPage = loginModal.loginToAccount("vasylLabaTesterUser@gmail.com", "12345678AAa");
 
         //check if was opened next page
         Assert.assertTrue(logInPage.isPresent(), "LogInPage object is not present");

@@ -15,7 +15,6 @@
  */
 package com.qaprosoft.carina.demo.gui.components;
 
-import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
 import com.qaprosoft.carina.demo.gui.pages.NetworkCoverage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -27,32 +26,25 @@ import com.qaprosoft.carina.demo.gui.pages.CompareModelsPage;
 import com.qaprosoft.carina.demo.gui.pages.HomePage;
 import com.qaprosoft.carina.demo.gui.pages.NewsPage;
 
-import java.util.List;
 
 public class FooterMenu extends AbstractUIObject {
 
-    @FindBy(xpath = "//div[@id='footmenu']//a[@href]")
-    private List<ExtendedWebElement> footerMenuButtons;
-
-    @FindBy(xpath = "//div[@id='footer-inner']//div[@class='footer-logo']")
+    @FindBy(xpath = "//div[@id='footer']//img")
     private ExtendedWebElement footerLogo;
 
-    @FindBy(linkText = "Home")
+    @FindBy(xpath = "//div[@id='footer']//a[@href='/']")
     private ExtendedWebElement homeLink;
 
-    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(text(),'Compare')]")
-    private ExtendedWebElement compareLink;
-
-    @FindBy(linkText = "News")
+    @FindBy(xpath = "//div[@id='footer']//a[@href='news.php3']")
     private ExtendedWebElement newsLink;
 
-    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(@href,'reviews.php3')]")
+    @FindBy(xpath = "//div[@id='footer']//a[@href='reviews.php3']")
     private ExtendedWebElement reviewsLink;
 
-    @FindBy(xpath = "//div[@class='footer-inner']//a[contains(@href,'blog.php3')]")
-    private ExtendedWebElement blogLink;
+    @FindBy(xpath = "//div[@id='footer']//a[@href='compare.php3']")
+    private ExtendedWebElement compareLink;
 
-    @FindBy(xpath = "(//a[text()='Coverage'])[2]")
+    @FindBy(xpath = "//div[@id='footer']//a[@href='network-bands.php3']")
     private ExtendedWebElement coverageLink;
 
     public FooterMenu(WebDriver driver, SearchContext searchContext) {
@@ -75,7 +67,7 @@ public class FooterMenu extends AbstractUIObject {
     }
 
     public boolean isElementPresent() {
-        return compareLink.isElementPresent();
+        return footerLogo.isElementPresent(1);
     }
 
     public ExtendedWebElement getFooterLogo() {
@@ -93,9 +85,5 @@ public class FooterMenu extends AbstractUIObject {
     public NetworkCoverage clickCoverageButton() {
         coverageLink.click();
         return new NetworkCoverage(driver);
-    }
-
-    public void clickFooterButton(FooterMenuButtons button) {
-        footerMenuButtons.get(button.getButton()).click();
     }
 }
