@@ -22,6 +22,7 @@ import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.WeValuePrivacyAd;
 import com.zebrunner.carina.utils.Configuration;
 import com.zebrunner.carina.utils.R;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class HomePage extends AbstractPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final JavascriptExecutor JS_EXECUTOR = (JavascriptExecutor) driver;
 
     @FindBy(id = "footmenu")
     private FooterMenu footerMenu;
@@ -43,7 +45,7 @@ public class HomePage extends AbstractPage {
     @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
     private List<ExtendedWebElement> brandLinks;
 
-    @FindBys({ @FindBy(xpath = "//p[contains(@class, 'pad')]"), @FindBy(xpath = ".//*[contains(@class, 'pad-single')]") })
+    @FindBys({@FindBy(xpath = "//p[contains(@class, 'pad')]"), @FindBy(xpath = ".//*[contains(@class, 'pad-single')]")})
     private ExtendedWebElement phoneFinderButton;
 
     @FindBy(className = "news-column-index")
@@ -84,9 +86,10 @@ public class HomePage extends AbstractPage {
         return phoneFinderButton;
     }
 
-    public void ScrollDownToFooterMenu(){
+    public void ScrollDownToFooterMenu() {
         LOGGER.info("scroll down to the footer menu");
-
-        footerMenu.getReviewsLink().scrollTo();
+        while (!footerMenu.isElementPresent()) {
+            JS_EXECUTOR.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+        }
     }
 }
