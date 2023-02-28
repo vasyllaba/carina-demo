@@ -57,8 +57,10 @@ public class SignUpPage extends AbstractPage {
         nicknameInput.type(nickName);
         emailInput.type(email);
         passwordInput.type(password);
-        if (storeData) storeDataAgreeCheckboxLabel.clickByJs();
-        if (ageAgree) ageAgreeCheckboxLabel.clickByJs();
+        if (storeData)
+            storeDataAgreeCheckboxLabel.clickByJs();
+        if (ageAgree)
+            ageAgreeCheckboxLabel.clickByJs();
     }
 
     public SignUpPage clickSubmitButton() {
