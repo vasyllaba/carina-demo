@@ -23,6 +23,22 @@ public class LogInModal extends AbstractUIObject {
     @FindBy(xpath = "//span[@class='tooltip']//a[@class='forgot']")
     private ExtendedWebElement forgotPasswordLink;
 
+    public ExtendedWebElement getEmailInput() {
+        return emailInput;
+    }
+
+    public ExtendedWebElement getPasswordInput() {
+        return passwordInput;
+    }
+
+    public ExtendedWebElement getLogInButton() {
+        return logInButton;
+    }
+
+    public ExtendedWebElement getForgotPasswordLink() {
+        return forgotPasswordLink;
+    }
+
     public ExtendedWebElement getLoginTitle() {
         return loginTitle;
     }
@@ -32,29 +48,36 @@ public class LogInModal extends AbstractUIObject {
     }
 
     public boolean isVisible() {
-        return isPresent() &&
-                loginTitle.isVisible() &&
-                emailInput.isVisible() &&
-                passwordInput.isVisible() &&
-                logInButton.isVisible() &&
-                forgotPasswordLink.isVisible();
+        if (!isPresent())
+            return false;
+        if (!getLoginTitle().isVisible())
+            return false;
+        if (!getEmailInput().isVisible())
+            return false;
+        if (!getPasswordInput().isVisible())
+            return false;
+        if (!getLogInButton().isVisible())
+            return false;
+        return getForgotPasswordLink().isVisible();
     }
 
     private boolean isPresent() {
-        return loginTitle.isPresent() &&
-                emailInput.isPresent() &&
-                passwordInput.isPresent() &&
-                logInButton.isPresent() &&
-                forgotPasswordLink.isPresent();
+        if (!getLoginTitle().isElementPresent())
+            return false;
+        if (!getEmailInput().isElementPresent())
+            return false;
+        if (!getPasswordInput().isElementPresent())
+            return false;
+        if (!getLogInButton().isElementPresent())
+            return false;
+        return getForgotPasswordLink().isElementPresent();
     }
 
     public void fillInEmailInput(String email) {
-        validateEmail(email);
         emailInput.type(email);
     }
 
     public void fillInPasswordInput(String password) {
-        validatePassword(password);
         passwordInput.type(password);
     }
 
@@ -63,14 +86,10 @@ public class LogInModal extends AbstractUIObject {
         return new LogInPage(driver);
     }
 
-    private void validateEmail(String email){
-        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
-            throw new IllegalArgumentException("Invalid email");
-    }
-
-    private void validatePassword(String password){
-        if (!password.matches("^[\\w-]{8,40}$"))
-            throw new IllegalArgumentException("Invalid password");
+    public LogInPage loginToAccount(String email, String password) {
+        fillInEmailInput(email);
+        fillInPasswordInput(password);
+        return clickLogInButton();
     }
 
 }
