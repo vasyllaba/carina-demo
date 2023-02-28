@@ -19,6 +19,7 @@ import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebEleme
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.qaprosoft.carina.demo.gui.components.FooterMenu;
 import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
+import com.qaprosoft.carina.demo.gui.components.LogInModal;
 import com.qaprosoft.carina.demo.gui.components.WeValuePrivacyAd;
 import com.zebrunner.carina.utils.Configuration;
 import com.zebrunner.carina.utils.R;
@@ -51,6 +52,9 @@ public class HomePage extends AbstractPage {
     @FindBy(className = "news-column-index")
     private ExtendedWebElement newsColumn;
 
+    @FindBy(xpath = "//span[@id='login-popup2']")
+    private ExtendedWebElement logInModal;
+
     public HomePage(WebDriver driver) {
         super(driver);
         setUiLoadedMarker(newsColumn);
@@ -63,6 +67,10 @@ public class HomePage extends AbstractPage {
 
     public HeaderMenu getHeaderMenu() {
         return headerMenu;
+    }
+
+    public LogInModal getLogInModal() {
+        return new LogInModal(driver);
     }
 
     public BrandModelsPage selectBrand(String brand) {
