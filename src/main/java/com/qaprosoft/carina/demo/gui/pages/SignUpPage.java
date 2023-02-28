@@ -40,19 +40,24 @@ public class SignUpPage extends AbstractPage {
     }
 
     public boolean isCreateAccountElementsPresent() {
-        return nicknameInput.isElementPresent()
-                && emailInput.isElementPresent()
-                && passwordInput.isElementPresent()
-                && storeDataAgreeCheckboxLabel.isElementPresent()
-                && ageAgreeCheckboxLabel.isElementPresent()
-                && submitButton.isElementPresent();
+        if (!isNicknameInputPresent())
+            return false;
+        if (!isEmailInputPresent())
+            return false;
+        if (!isPasswordInputPresent())
+            return false;
+        if (!isStoreDataAgreeCheckboxLabelInputPresent())
+            return false;
+        if (!isAgeAgreeCheckboxLabelPresent())
+            return false;
+        return isSubmitButtonPresent();
     }
 
-    public void fillInNewUserInfo(String nickName, String email, String password, boolean storeDaya, boolean ageAgree) {
+    public void fillInNewUserInfo(String nickName, String email, String password, boolean storeData, boolean ageAgree) {
         nicknameInput.type(nickName);
         emailInput.type(email);
         passwordInput.type(password);
-        if (storeDaya) storeDataAgreeCheckboxLabel.clickByJs();
+        if (storeData) storeDataAgreeCheckboxLabel.clickByJs();
         if (ageAgree) ageAgreeCheckboxLabel.clickByJs();
     }
 
@@ -60,4 +65,30 @@ public class SignUpPage extends AbstractPage {
         submitButton.click();
         return this;
     }
+
+    public boolean isNicknameInputPresent(){
+        return nicknameInput.isElementPresent();
+    }
+
+    public boolean isEmailInputPresent(){
+        return emailInput.isElementPresent();
+    }
+
+    public boolean isPasswordInputPresent(){
+        return passwordInput.isElementPresent();
+    }
+
+    public boolean isStoreDataAgreeCheckboxLabelInputPresent(){
+        return storeDataAgreeCheckboxLabel.isElementPresent();
+    }
+
+    public boolean isAgeAgreeCheckboxLabelPresent(){
+        return ageAgreeCheckboxLabel.isElementPresent();
+    }
+
+    public boolean isSubmitButtonPresent(){
+        return submitButton.isElementPresent();
+    }
+
+
 }
