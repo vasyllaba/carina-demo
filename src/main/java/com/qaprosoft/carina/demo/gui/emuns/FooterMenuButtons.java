@@ -4,14 +4,23 @@ public enum FooterMenuButtons {
     HOME(0),
     NEWS(1),
     REVIEWS(2),
-    BLOG(3),
-    PHONE_FINDER(4),
-    TOOLS(5),
-    COMPARE(6),
-    COVERAGE(7),
-    GLOSSARY(8),
-    CONTACT_US(9),
-    EDITORIAL_TEAM(10);
+    COMPARE(3),
+    COVERAGE(4),
+    GLOSSARY(5),
+    FAQ(6),
+    RSS_FEED(7),
+    YOUTUBE(8),
+    FACEBOOK(9),
+    TWITTER(10),
+    INSTAGRAM(11),
+    TEAM(12),
+    MOBILE_VERSION(13),
+    ANDROID_APP(14),
+    TOOLS(15),
+    CONTACT_US(16),
+    MERCH_STORE(17),
+    PRIVACY(18),
+    TERM_OF_USE(19);
 
     private final int footerElement;
 
@@ -19,7 +28,7 @@ public enum FooterMenuButtons {
         this.footerElement = footerElement;
     }
 
-    public int getButton() {
+    public int getButtonIndex() {
         return footerElement;
     }
 }
