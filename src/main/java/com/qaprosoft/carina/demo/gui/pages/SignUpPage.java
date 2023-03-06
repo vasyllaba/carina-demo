@@ -4,6 +4,7 @@ import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebEleme
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.testng.asserts.SoftAssert;
 
 public class SignUpPage extends AbstractPage {
 
@@ -39,18 +40,15 @@ public class SignUpPage extends AbstractPage {
         return resultMessage;
     }
 
-    public boolean isCreateAccountElementsPresent() {
-        if (!isNicknameInputPresent())
-            return false;
-        if (!isEmailInputPresent())
-            return false;
-        if (!isPasswordInputPresent())
-            return false;
-        if (!isStoreDataAgreeCheckboxLabelInputPresent())
-            return false;
-        if (!isAgeAgreeCheckboxLabelPresent())
-            return false;
-        return isSubmitButtonPresent();
+    public void validateAccountElementsIfPresent() {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(isNicknameInputPresent(), "Nickname input is not present");
+        softAssert.assertTrue(isEmailInputPresent(), "Email input is not present");
+        softAssert.assertTrue(isPasswordInputPresent(), "Password input is not present");
+        softAssert.assertTrue(isStoreDataAgreeCheckboxLabelInputPresent(), "Store data checkbox is not present");
+        softAssert.assertTrue(isAgeAgreeCheckboxLabelPresent(), "Age agree checkbox is not present");
+        softAssert.assertTrue(isSubmitButtonPresent(), "Submit button is not present");
+        softAssert.assertAll();
     }
 
     public void fillInNewUserInfo(String nickName, String email, String password, boolean storeData, boolean ageAgree) {
@@ -68,29 +66,28 @@ public class SignUpPage extends AbstractPage {
         return this;
     }
 
-    public boolean isNicknameInputPresent(){
+    public boolean isNicknameInputPresent() {
         return nicknameInput.isElementPresent();
     }
 
-    public boolean isEmailInputPresent(){
+    public boolean isEmailInputPresent() {
         return emailInput.isElementPresent();
     }
 
-    public boolean isPasswordInputPresent(){
+    public boolean isPasswordInputPresent() {
         return passwordInput.isElementPresent();
     }
 
-    public boolean isStoreDataAgreeCheckboxLabelInputPresent(){
+    public boolean isStoreDataAgreeCheckboxLabelInputPresent() {
         return storeDataAgreeCheckboxLabel.isElementPresent();
     }
 
-    public boolean isAgeAgreeCheckboxLabelPresent(){
+    public boolean isAgeAgreeCheckboxLabelPresent() {
         return ageAgreeCheckboxLabel.isElementPresent();
     }
 
-    public boolean isSubmitButtonPresent(){
+    public boolean isSubmitButtonPresent() {
         return submitButton.isElementPresent();
     }
-
 
 }
