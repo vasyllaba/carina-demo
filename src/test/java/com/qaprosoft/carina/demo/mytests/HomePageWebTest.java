@@ -1,6 +1,7 @@
 package com.qaprosoft.carina.demo.mytests;
 
 import com.qaprosoft.carina.core.foundation.IAbstractTest;
+import com.qaprosoft.carina.core.foundation.dataprovider.annotations.XlsDataSourceParameters;
 import com.qaprosoft.carina.demo.gui.components.FooterMenu;
 import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.LogInModal;
@@ -171,25 +172,23 @@ public class HomePageWebTest implements IAbstractTest {
         Assert.assertTrue(logInPage.isPresent(), "LogInPage object is not present");
     }
 
-    @Test()
+    @Test(dataProvider = "DataProvider")
+    @XlsDataSourceParameters(path = "xls/demo.xlsx", sheet = "LoginData", dsUid = "TUID", dsArgs = "email, password, expectedMessage")
     @MethodOwner(owner = "Vasyl Laba")
     @TestPriority(Priority.P4)
-    public void testLogInProcessWithInvalidInput() {
+    public void testLogInProcessWithInvalidInput(String email, String password, String expectedMessage) {
         // Open GSM Arena home page
         HomePage homePage = new HomePage(getDriver());
         homePage.open();
         Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
 
-        //click on the button “Log in”
         LogInModal loginModal = homePage.getHeaderMenu().clickLogInButton();
-//        Assert.assertTrue(loginModal.isVisible(), "Log In modal object is not visible");
-
         //try to log in with invalid email
-        LogInPage logInPage = loginModal.loginToAccount("incorrect", "12345678AAa");
+        LogInPage logInPage = loginModal.loginToAccount(email, password);
 
         //check if was opened next page
-        Assert.assertEquals(loginModal.getEmailInput().getAttribute("validationMessage"),
-                "Please include an '@' in the email address. 'incorrect' is missing an '@'.");
+        Assert.assertEquals(loginModal.getEmailInput().getAttribute("validationMessage"), expectedMessage,
+                "Incorrect message");
     }
 
     public void validateAccountElementsIfPresent(SignUpPage signUpPage) {
