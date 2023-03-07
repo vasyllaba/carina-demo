@@ -3,8 +3,10 @@ package com.qaprosoft.carina.demo.gui.components;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
 import com.qaprosoft.carina.demo.gui.pages.LogInPage;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.testng.asserts.SoftAssert;
 
 public class LogInModal extends AbstractUIObject {
 
@@ -43,34 +45,29 @@ public class LogInModal extends AbstractUIObject {
         return loginTitle;
     }
 
+    public LogInModal(WebDriver driver, SearchContext searchContext) {
+        super(driver, searchContext);
+    }
+
     public LogInModal(WebDriver driver) {
         super(driver);
     }
 
-    public boolean isVisible() {
-        if (!isPresent())
-            return false;
-        if (!getLoginTitle().isVisible())
-            return false;
-        if (!getEmailInput().isVisible())
-            return false;
-        if (!getPasswordInput().isVisible())
-            return false;
-        if (!getLogInButton().isVisible())
-            return false;
-        return getForgotPasswordLink().isVisible();
+    public void validateLogInModalElementsIfVisible(SoftAssert softAssert) {
+        validateLogInModalElementsIfPresent(softAssert);
+        softAssert.assertTrue(getLoginTitle().isVisible(), "Login title is not visible");
+        softAssert.assertTrue(getEmailInput().isVisible(), "Email input is not visible");
+        softAssert.assertTrue(getPasswordInput().isVisible(), "Password input is not visible");
+        softAssert.assertTrue(getLogInButton().isVisible(), "Login button is not visible");
+        softAssert.assertTrue(getForgotPasswordLink().isVisible(), "ForgotPassword link is not visible");
     }
 
-    private boolean isPresent() {
-        if (!getLoginTitle().isElementPresent())
-            return false;
-        if (!getEmailInput().isElementPresent())
-            return false;
-        if (!getPasswordInput().isElementPresent())
-            return false;
-        if (!getLogInButton().isElementPresent())
-            return false;
-        return getForgotPasswordLink().isElementPresent();
+    private void validateLogInModalElementsIfPresent(SoftAssert softAssert) {
+        softAssert.assertTrue(getLoginTitle().isElementPresent(), "Login title is not present");
+        softAssert.assertTrue(getEmailInput().isElementPresent(), "Email input is not present");
+        softAssert.assertTrue(getPasswordInput().isElementPresent(), "Password input is not present");
+        softAssert.assertTrue(getLogInButton().isElementPresent(), "Login button is not present");
+        softAssert.assertTrue(getForgotPasswordLink().isElementPresent(), "ForgotPassword link is not present");
     }
 
     public void fillInEmailInput(String email) {
