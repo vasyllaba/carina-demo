@@ -53,8 +53,12 @@ public class HeaderMenu extends AbstractUIObject {
     @FindBy(xpath = "//a[@class='login-icon']")
     private ExtendedWebElement logInButton;
 
+    @FindBy(xpath = "//span[@class='tooltip']")
+    private LogInModal logInModal;
+
     public HeaderMenu(WebDriver driver, SearchContext searchContext) {
         super(driver, searchContext);
+        setUiLoadedMarker(logInButton);
     }
 
     public HeaderMenu clickToggleNavigationButton() {
