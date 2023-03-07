@@ -4,24 +4,26 @@ import com.qaprosoft.carina.core.foundation.IAbstractTest;
 import com.qaprosoft.carina.demo.gui.components.FooterMenu;
 import com.qaprosoft.carina.demo.gui.components.HeaderMenu;
 import com.qaprosoft.carina.demo.gui.components.LogInModal;
+import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
 import com.qaprosoft.carina.demo.gui.pages.*;
 import com.qaprosoft.carina.demo.projectConstants.ProjectConstants;
-import com.qaprosoft.carina.demo.utils.PageHandler;
+import com.qaprosoft.carina.demo.utils.TabHandler;
 import com.qaprosoft.carina.demo.utils.StringGenerator;
 import com.zebrunner.carina.core.registrar.ownership.MethodOwner;
 import com.zebrunner.carina.core.registrar.tag.Priority;
 import com.zebrunner.carina.core.registrar.tag.TestPriority;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
+import org.testng.asserts.SoftAssert;
 
 
 public class HomePageWebTest implements IAbstractTest {
 
-    @Test()
+    @Test(dataProvider = "DP1")
     @MethodOwner(owner = "Vasyl Laba")
     @TestPriority(Priority.P1)
-    public void testFooterMenuButtons() {
+    public void testFooterMenuButtons(FooterMenuButtons footerMenuButton, String url) {
         // Open GSM Arena home page
         HomePage homePage = new HomePage(getDriver());
         homePage.open();
@@ -33,9 +35,39 @@ public class HomePageWebTest implements IAbstractTest {
 
         //check if buttons on the menu present
         FooterMenu footerMenu = homePage.getFooterMenu();
-        NewsPage newsPage = footerMenu.openNewsPage();
-        Assert.assertTrue(newsPage.isPageOpened(), "Page is not opened!");
+        Assert.assertTrue(footerMenu.isElementPresent(), "FooterMenu is not present!");
+
+        footerMenu.clickButton(footerMenuButton);
+        TabHandler.switchBetweenPages(getDriver());
+        Assert.assertEquals(getDriver().getCurrentUrl(), url);
+
     }
+
+    @DataProvider(parallel = false, name = "DP1")
+    public Object[][] footerMenuButtonsDataProvider() {
+        return new Object[][]{
+                {FooterMenuButtons.NEWS, ProjectConstants.NEWS_PAGE_URL},
+                {FooterMenuButtons.REVIEWS, ProjectConstants.REVIEWS_PAGE_URL},
+                {FooterMenuButtons.COMPARE, ProjectConstants.COMPARE_PAGE_URL},
+                {FooterMenuButtons.COVERAGE, ProjectConstants.COVERAGE_PAGE_URL},
+                {FooterMenuButtons.GLOSSARY, ProjectConstants.GLOSSARY_PAGE_URL},
+                {FooterMenuButtons.FAQ, ProjectConstants.FAQ_PAGE_URL},
+                {FooterMenuButtons.RSS_FEED, ProjectConstants.RSS_FEED_PAGE_URL},
+                {FooterMenuButtons.YOUTUBE, ProjectConstants.YOUTUBE_PAGE_URL},
+                {FooterMenuButtons.FACEBOOK, ProjectConstants.FACEBOOK_PAGE_URL},
+                {FooterMenuButtons.TWITTER, ProjectConstants.TWITTER_PAGE_URL},
+                {FooterMenuButtons.INSTAGRAM, ProjectConstants.INSTAGRAM_PAGE_URL},
+                {FooterMenuButtons.TEAM, ProjectConstants.TEAM_PAGE_URL},
+                {FooterMenuButtons.MOBILE_VERSION, ProjectConstants.HOME_PAGE_MOBILE_VERSION_URL},
+                {FooterMenuButtons.ANDROID_APP, ProjectConstants.ANDROID_APP_URL},
+                {FooterMenuButtons.TOOLS, ProjectConstants.TOOLS_PAGE_URL},
+                {FooterMenuButtons.CONTACT_US, ProjectConstants.CONTACT_PAGE_URL},
+                {FooterMenuButtons.MERCH_STORE, ProjectConstants.MERCH_PAGE_URL},
+                {FooterMenuButtons.PRIVACY, ProjectConstants.PRIVACY_PAGE_URL},
+                {FooterMenuButtons.TERM_OF_USE, ProjectConstants.TERM_OF_USE_PAGE_URL}
+        };
+    }
+
 
     @Test()
     @MethodOwner(owner = "Vasyl Laba")
@@ -72,10 +104,10 @@ public class HomePageWebTest implements IAbstractTest {
         Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.DEALS_PAGE_URL, "Page url does not match");
 
         headerMenu.clickMerchPageButton();
-        PageHandler.switchBetweenPages(getDriver());
+        TabHandler.switchBetweenPages(getDriver());
         Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.MERCH_PAGE_URL, "Page url does not match");
-        PageHandler.closeCurrentPage(getDriver());
-        PageHandler.switchBetweenPages(getDriver());
+        TabHandler.closeCurrentPage(getDriver());
+        TabHandler.switchBetweenPages(getDriver());
 
         headerMenu.clickCoveragePageButton();
         Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.COVERAGE_PAGE_URL, "Page url does not match");
@@ -95,22 +127,24 @@ public class HomePageWebTest implements IAbstractTest {
         Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
 
         //click on the button “Sing up”
-        SignUpPage sp = homePage.getHeaderMenu().clickSignUpButton();
+        SignUpPage signUpPage = homePage.getHeaderMenu().clickSignUpButton();
         Assert.assertEquals(getDriver().getCurrentUrl(), ProjectConstants.SIGN_UP_PAGE_URL, "Page url does not match");
 
         //check if all elements on the SingUp Page present
-        Assert.assertTrue(sp.isCreateAccountElementsPresent(), "Some element in create account menu do not present");
+        //here I use two types of checks (in page class and in test class) just for example
+        signUpPage.validateAccountElementsIfPresent();
+        validateAccountElementsIfPresent(signUpPage);
 
         //fill in all info to create new account
-        sp.fillInNewUserInfo(StringGenerator.generateLogin(),
+        signUpPage.fillInNewUserInfo(StringGenerator.generateLogin(),
                 StringGenerator.generateEmail(),
                 "12345678AAa",
                 true,
                 true);
 
         //click Submit button
-        sp.clickSubmitButton();
-        Assert.assertTrue(sp.getResultMessage().isElementPresent(), "Result message do not present");
+        signUpPage.clickSubmitButton();
+        Assert.assertTrue(signUpPage.getResultMessage().isElementPresent(), "Result message do not present");
 
     }
 
@@ -127,12 +161,42 @@ public class HomePageWebTest implements IAbstractTest {
         LogInModal loginModal = homePage.getHeaderMenu().clickLogInButton();
 
         //Check all elements on the LogIn Modal - if elements present
-        Assert.assertTrue(loginModal.isVisible(), "Log In modal object is not visible");
+        SoftAssert softAssert = new SoftAssert();
+        loginModal.validateLogInModalElementsIfVisible(softAssert);
+        softAssert.assertAll();
 
         LogInPage logInPage = loginModal.loginToAccount("vasylLabaTesterUser@gmail.com", "12345678AAa");
 
         //check if was opened next page
         Assert.assertTrue(logInPage.isPresent(), "LogInPage object is not present");
+    }
+
+    @Test()
+    @MethodOwner(owner = "Vasyl Laba")
+    @TestPriority(Priority.P4)
+    public void testLogInProcessWithInvalidInput() {
+        // Open GSM Arena home page
+        HomePage homePage = new HomePage(getDriver());
+        homePage.open();
+        Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
+
+        //click on the button “Log in”
+        LogInModal loginModal = homePage.getHeaderMenu().clickLogInButton();
+//        Assert.assertTrue(loginModal.isVisible(), "Log In modal object is not visible");
+
+        //try to log in with invalid email
+        LogInPage logInPage = loginModal.loginToAccount("incorrect", "12345678AAa");
+
+        //check if was opened next page
+        Assert.assertEquals(loginModal.getEmailInput().getAttribute("validationMessage"),
+                "Please include an '@' in the email address. 'incorrect' is missing an '@'.");
+    }
+
+    public void validateAccountElementsIfPresent(SignUpPage signUpPage) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(signUpPage.isNicknameInputPresent(), "Nickname element is not present");
+
+        softAssert.assertAll();
     }
 
 }
