@@ -15,19 +15,23 @@
  */
 package com.qaprosoft.carina.demo.gui.components;
 
+import com.qaprosoft.carina.demo.gui.emuns.FooterMenuButtons;
 import com.qaprosoft.carina.demo.gui.pages.NetworkCoverage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
 import com.qaprosoft.carina.demo.gui.pages.CompareModelsPage;
 import com.qaprosoft.carina.demo.gui.pages.HomePage;
 import com.qaprosoft.carina.demo.gui.pages.NewsPage;
+import java.util.List;
 
 
 public class FooterMenu extends AbstractUIObject {
+
+    @FindBy(xpath = "//div[@id='footer']//a")
+    private List<ExtendedWebElement> footerMenuButtons;
 
     @FindBy(xpath = "//div[@id='footer']//img")
     private ExtendedWebElement footerLogo;
@@ -51,6 +55,10 @@ public class FooterMenu extends AbstractUIObject {
         super(driver, searchContext);
     }
 
+    public FooterMenu(WebDriver driver) {
+        super(driver);
+    }
+
     public HomePage openHomePage() {
         homeLink.click();
         return new HomePage(driver);
@@ -64,6 +72,10 @@ public class FooterMenu extends AbstractUIObject {
     public NewsPage openNewsPage() {
         newsLink.click();
         return new NewsPage(driver);
+    }
+
+    public void clickButton(FooterMenuButtons footerMenuButton) {
+        getFooterMenuButtons().get(footerMenuButton.getButtonIndex()).click();
     }
 
     public boolean isElementPresent() {
@@ -80,6 +92,10 @@ public class FooterMenu extends AbstractUIObject {
 
     public ExtendedWebElement getReviewsLink() {
         return reviewsLink;
+    }
+
+    public List<ExtendedWebElement> getFooterMenuButtons() {
+        return footerMenuButtons;
     }
 
     public NetworkCoverage clickCoverageButton() {
