@@ -163,6 +163,7 @@ public class HomePageWebTest implements IAbstractTest {
 
         //Check all elements on the LogIn Modal - if elements present
         SoftAssert softAssert = new SoftAssert();
+        loginModal.validateLogInModalElementsIfPresent(softAssert);
         loginModal.validateLogInModalElementsIfVisible(softAssert);
         softAssert.assertAll();
 

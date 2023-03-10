@@ -54,7 +54,6 @@ public class LogInModal extends AbstractUIObject {
     }
 
     public void validateLogInModalElementsIfVisible(SoftAssert softAssert) {
-        validateLogInModalElementsIfPresent(softAssert);
         softAssert.assertTrue(getLoginTitle().isVisible(), "Login title is not visible");
         softAssert.assertTrue(getEmailInput().isVisible(), "Email input is not visible");
         softAssert.assertTrue(getPasswordInput().isVisible(), "Password input is not visible");
@@ -62,7 +61,7 @@ public class LogInModal extends AbstractUIObject {
         softAssert.assertTrue(getForgotPasswordLink().isVisible(), "ForgotPassword link is not visible");
     }
 
-    private void validateLogInModalElementsIfPresent(SoftAssert softAssert) {
+    public void validateLogInModalElementsIfPresent(SoftAssert softAssert) {
         softAssert.assertTrue(getLoginTitle().isElementPresent(), "Login title is not present");
         softAssert.assertTrue(getEmailInput().isElementPresent(), "Email input is not present");
         softAssert.assertTrue(getPasswordInput().isElementPresent(), "Password input is not present");
