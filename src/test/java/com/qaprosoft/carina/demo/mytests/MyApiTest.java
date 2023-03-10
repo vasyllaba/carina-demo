@@ -43,7 +43,7 @@ public class MyApiTest implements IAbstractTest {
     public void testPutDepartment() {
         LOGGER.info("run testPutDepartment");
         PutDepartmentMethod putDepartmentMethod = new PutDepartmentMethod();
-        putDepartmentMethod.setProperties("api/departments/department-patch.properties");
+        putDepartmentMethod.setProperties("api/departments/department-put.properties");
         putDepartmentMethod.request.pathParam("id", 4);
         putDepartmentMethod.callAPIExpectSuccess();
         putDepartmentMethod.validateResponse();
