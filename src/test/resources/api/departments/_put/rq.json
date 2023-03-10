@@ -1,4 +1,4 @@
 {
   "id": 4,
-  "name": "NewName"
+  <#if name??>"name": "${name}"</#if>
 }
